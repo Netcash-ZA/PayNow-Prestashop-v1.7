@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--Copyright 2019 Sage Pay (Pty) Ltd -->
+<module>
+    <name>paynow</name>
+    <displayName><![CDATA[Sage Pay Pay Now]]></displayName>
+    <version><![CDATA[1.0.0]]></version>
+    <description><![CDATA[Accept payments by credit card, EFT, securely and quickly with Sage Pay Now.]]></description>
+    <author><![CDATA[Sage Pay]]></author>
+    <tab><![CDATA[payments_gateways]]></tab>
+	<confirmUninstall><![CDATA[Are you sure you want to remove your data?]]></confirmUninstall>
+    <is_configurable>1</is_configurable>
+    <need_instance>1</need_instance>
+	<limited_countries></limited_countries>
+</module>
