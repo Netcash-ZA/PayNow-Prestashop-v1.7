@@ -116,6 +116,17 @@ function pn_do_transaction() {
 				// Update the purchase status
 				$paynow->validateOrder( $cartId, _PS_OS_PAYMENT_, (float) $total,
 					$paynow->displayName, null, array( 'transaction_id' => $transaction_id ), null, false, $secureKey );
+			} else {
+				pnlog( '- Adding order history' );
+
+				$orderId = Order::getIdByCartId((int) $cartId);
+
+				$history = new OrderHistory();
+				$history->id_order = $orderId;
+				$order = new Order((int) $orderId);
+				$history->changeIdOrderState((int) _PS_OS_PAYMENT_, $order, false);
+
+				pnlog( "Changed to " . _PS_OS_PAYMENT_ . " for cart {$cartId} / order {$orderId}" );
 			}
 
 			pnlog( '- Redirecting to order-confirmation' );
@@ -125,13 +136,20 @@ function pn_do_transaction() {
 		case 'false':
 			pnlog( '- Failed' );
 
+			$is_pending = isset($postedData['Reason']) && stristr($postedData['Reason'], 'pending');
+			pnlog( '- Is Pending? ' . ($is_pending ? 'TRUE' : 'FALSE') );
+
 			$order_exists = $cart->OrderExists();
 			pnlog( '- Order Exists? ' . ($order_exists ? 'TRUE' : 'FALSE') );
 
 			if(!$order_exists) {
 
+				$state = _PS_OS_ERROR_;
+				if($is_pending) {
+					$state = _PS_OS_BANKWIRE_;
+				}
 				// If payment fails, delete the purchase log
-				$paynow->validateOrder( $cartId, _PS_OS_ERROR_, (float) $total,
+				$paynow->validateOrder( $cartId, $state, (float) $total,
 					$paynow->displayName, null, array( 'transaction_id' => $transaction_id ), null, false, $secureKey );
 			}
 
