@@ -43,6 +43,7 @@ class PayNow extends PaymentModule
             OR !$this->registerHook('paymentOptions')
             OR !$this->registerHook('paymentReturn')
             OR !Configuration::updateValue('PAYNOW_SERVICE_KEY', '')
+            OR !Configuration::updateValue('PAYNOW_ACCOUNT_NUMBER', '')
             OR !Configuration::updateValue('PAYNOW_ENABLE_LOGS', '1')
             OR !Configuration::updateValue('PAYNOW_MODE', 'test')
             OR !Configuration::updateValue('SAGE_PAYNOW_TEXT', 'Pay Now using')
@@ -60,6 +61,7 @@ class PayNow extends PaymentModule
     {
         return ( parent::uninstall()
             AND Configuration::deleteByName('PAYNOW_SERVICE_KEY')
+            AND Configuration::deleteByName('PAYNOW_ACCOUNT_NUMBER')
             AND Configuration::deleteByName('PAYNOW_MODE')
             AND Configuration::deleteByName('PAYNOW_ENABLE_LOGS')
             AND Configuration::deleteByName('SAGE_PAYNOW_TEXT')
@@ -106,8 +108,47 @@ class PayNow extends PaymentModule
             $mode = Tools::getValue( 'paynow_mode' );
             Configuration::updateValue( 'PAYNOW_MODE', $mode );
 
-            $merchant_id = Tools::getValue( 'paynow_service_key' );
-            Configuration::updateValue( 'PAYNOW_SERVICE_KEY', $merchant_id );
+            $account_number = Tools::getValue( 'paynow_account_number' );
+            $service_key = Tools::getValue( 'paynow_service_key' );
+
+            $serviceKeyErrors = [];
+            if( $account_number && $service_key ) {
+                if(class_exists('SoapClient')) {
+                    // We can continue, SOAP is installed
+
+                    require_once(dirname(__FILE__).'/PayNowValidator.php');
+                    $Validator = new SagePay\PayNowValidator();
+                    $Validator->setVendorKey('94cdf2e6-f2e7-4c91-ad34-da5684bfbd6f');
+
+                    try {
+                        $result = $Validator->validate_paynow_service_key($account_number, $service_key);
+
+                        if( $result !== true ) {
+                            $serviceKeyErrors[] = (isset($result[$service_key]) ? $result[$service_key] : '<strong>Account Number:</strong> ' . $result) . ' ';
+                            $serviceKeyErrors[] = (isset($result[$service_key]) ? $result[$service_key] : '<strong>Service Key</strong> could not be validated.') . ' ';
+                        } else {
+
+                            // Success
+                            Configuration::updateValue( 'PAYNOW_ACCOUNT_NUMBER', $account_number );
+                            Configuration::updateValue( 'PAYNOW_SERVICE_KEY', $service_key );
+
+                        }
+                    } catch(\Exception $e) {
+                        $serviceKeyErrors[] = $e->getMessage() . ' ';
+                    }
+                } else {
+                    $serviceKeyErrors[] = 'Cannot validate. Please install the PHP SOAP extension.';
+                }
+            } else {
+                $serviceKeyErrors[] = 'Please specify an account number and service key.</div>';
+            }
+
+            if(!empty($serviceKeyErrors)) {
+                $serviceKeyErrors[] = "Please contact your Sage Pay Account manager on 0861 338 338 for assistance.";
+                foreach ($serviceKeyErrors as $error) {
+                    $errors[] = "<div class='warning warn'>{$error}</div>";
+                }
+            }
 
 
             $paynow_enable_logs = Tools::getValue( 'paynow_enable_logs');
@@ -179,10 +220,22 @@ class PayNow extends PaymentModule
               <div class="merchant__details merchant__config">
                  <div class="account__details">
                     <span class="merchant__headers">
+                        '.$this->l('Pay Now Account Number').'
+                    </span>
+                    <input class="merchant__input" type="text" step="0" min="0" name="paynow_account_number" placeholder="" value="'.Tools::getValue('paynow_account_number', Configuration::get('PAYNOW_ACCOUNT_NUMBER')).'" />
+
+                 </div>
+             </div>
+
+            <div class="divider"></div>
+
+              <div class="merchant__details merchant__config">
+                 <div class="account__details">
+                    <span class="merchant__headers">
                         '.$this->l('Pay Now Service Key').'
                     </span>
                     <input class="merchant__input" type="text" step="0" min="0" name="paynow_service_key" placeholder="" value="'.Tools::getValue('paynow_service_key', Configuration::get('PAYNOW_SERVICE_KEY')).'" />
-                    
+
                  </div>
              <p class="additional__info additional__info--smaller">'.$this->l('You can find your Service Key in your ').'<a id="paynow__link" href="https://sagepay.co.za/">'.
             $this->l('Sage Pay Now').'</a>'.$this->l(' account.').'</p>
