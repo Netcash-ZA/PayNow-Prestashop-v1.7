@@ -2,12 +2,12 @@
 /**
  * common.php
  *
- * Copyright 2019 Sage Pay (Pty) Ltd
+ * Copyright 2019 Netcash (Pty) Ltd
  */
 
 define( 'PN_SOFTWARE_NAME', 'PrestaShop' );
 define( 'PN_SOFTWARE_VER', Configuration::get('PS_INSTALL_VERSION') );
-define( 'PN_MODULE_NAME', 'SagePayNow-Prestashop' );
+define( 'PN_MODULE_NAME', 'Netcash-PayNow-Prestashop' );
 define( 'PN_MODULE_VER', '1.0' );
 define( 'PN_DEBUG', ( Configuration::get('PAYNOW_ENABLE_LOGS')  ? true : false ) );
 
@@ -109,7 +109,7 @@ function verifyPayNowSignature() {
  *
  * @return bool
  */
-function validatePayNowData( $host = 'paynow.sagepay.co.za', $paramString = '', $proxy = null )  {
+function validatePayNowData( $host = 'paynow.netcash.co.za', $paramString = '', $proxy = null )  {
     pnlog( 'Host = ' . $host );
     pnlog( 'Params = ' . $paramString );
 
@@ -203,8 +203,8 @@ function validatePayNowData( $host = 'paynow.sagepay.co.za', $paramString = '', 
 function checkPayNowIP( $sourceIP ) {
     // Variable initialization
     $validHosts = array(
-        'sagepay.co.za',
-        'paynow.sagepay.co.za',
+        'netcash.co.za',
+        'paynow.netcash.co.za',
     );
 
     $validIps = array();

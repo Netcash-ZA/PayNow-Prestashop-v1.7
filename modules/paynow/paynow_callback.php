@@ -29,7 +29,7 @@ function pn_do_transaction() {
 	$errorMessage = '';
 	$isDone       = false;
 
-	$paynowHost   = 'https://paynow.sagepay.co.za/site/paynow.aspx';
+	$paynowHost   = 'https://paynow.netcash.co.za/site/paynow.aspx';
 	$paramString  = '';
 
 	$paynow = new PayNow();

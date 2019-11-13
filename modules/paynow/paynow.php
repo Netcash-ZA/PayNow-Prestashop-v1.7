@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2019 Sage Pay (Pty) Ltd
+ * Copyright 2019 Netcash (Pty) Ltd
  */
 
 use PrestaShop\PrestaShop\Core\Payment\PaymentOption;
@@ -31,8 +31,8 @@ class PayNow extends PaymentModule
         $this->author  = 'PayNow';
         $this->page = basename(__FILE__, '.php');
 
-        $this->displayName = $this->l( 'Sage Pay Now' );
-        $this->description = $this->l('Securely accept payments by credit card, EFT, and more with Sage Pay Now.');
+        $this->displayName = $this->l( 'Netcash Pay Now' );
+        $this->description = $this->l('Securely accept payments by credit card, EFT, and more with Netcash Pay Now.');
         $this->confirmUninstall = $this->l('Are you sure you want to delete your data?');
 
     }
@@ -46,9 +46,9 @@ class PayNow extends PaymentModule
             OR !Configuration::updateValue('PAYNOW_ACCOUNT_NUMBER', '')
             OR !Configuration::updateValue('PAYNOW_ENABLE_LOGS', '1')
             OR !Configuration::updateValue('PAYNOW_MODE', 'test')
-            OR !Configuration::updateValue('SAGE_PAYNOW_TEXT', 'Pay Now using')
-            OR !Configuration::updateValue('SAGE_PAYNOW_LOGO', 'on')
-            OR !Configuration::updateValue('SAGE_PAYNOW_ALIGN', 'right')
+            OR !Configuration::updateValue('NETCASH_PAYNOW_TEXT', 'Pay Now using')
+            OR !Configuration::updateValue('NETCASH_PAYNOW_LOGO', 'on')
+            OR !Configuration::updateValue('NETCASH_PAYNOW_ALIGN', 'right')
             )
         {
             return false;
@@ -64,9 +64,9 @@ class PayNow extends PaymentModule
             AND Configuration::deleteByName('PAYNOW_ACCOUNT_NUMBER')
             AND Configuration::deleteByName('PAYNOW_MODE')
             AND Configuration::deleteByName('PAYNOW_ENABLE_LOGS')
-            AND Configuration::deleteByName('SAGE_PAYNOW_TEXT')
-            AND Configuration::deleteByName('SAGE_PAYNOW_LOGO')
-            AND Configuration::deleteByName('SAGE_PAYNOW_ALIGN')
+            AND Configuration::deleteByName('NETCASH_PAYNOW_TEXT')
+            AND Configuration::deleteByName('NETCASH_PAYNOW_LOGO')
+            AND Configuration::deleteByName('NETCASH_PAYNOW_ALIGN')
             );
 
     }
@@ -79,10 +79,10 @@ class PayNow extends PaymentModule
         <div id="paynow__content">
         <div id="content" class="config__paynow">
         <div class="paynow__header">
-            <div class="col"><a href="https://sagepay.co.za/" target="_blank">
-                <img class="paynow__logo" src="'.__PS_BASE_URI__.'modules/paynow/logo.png" alt="Sage Pay Now" boreder="0" />
+            <div class="col"><a href="https://netcash.co.za/" target="_blank">
+                <img class="paynow__logo" src="'.__PS_BASE_URI__.'modules/paynow/paynow.png" alt="Netcash Pay Now" style="max-width:150px;" boreder="0" />
             </a></div>
-            <div class="col col-b"><span>Secure Payments with Sage Pay Now</span></div>
+            <div class="col col-b"><span>Secure Payments with Netcash Pay Now</span></div>
         </div>
         <div class="divider divider__longer"></div>';
 
@@ -90,18 +90,18 @@ class PayNow extends PaymentModule
         /* Update configuration variables */
         if( Tools::isSubmit( 'submitPayNow' ) )
         {
-            if( $paynow_text =  Tools::getValue( 'sage_paynow_text' ) )
+            if( $paynow_text =  Tools::getValue( 'netcash_paynow_text' ) )
             {
-                 Configuration::updateValue( 'SAGE_PAYNOW_TEXT', $paynow_text );
+                 Configuration::updateValue( 'NETCASH_PAYNOW_TEXT', $paynow_text );
             }
 
-            if( $paynow_logo =  Tools::getValue( 'sage_paynow_logo' ) )
+            if( $paynow_logo =  Tools::getValue( 'netcash_paynow_logo' ) )
             {
-                 Configuration::updateValue( 'SAGE_PAYNOW_LOGO', $paynow_logo );
+                 Configuration::updateValue( 'NETCASH_PAYNOW_LOGO', $paynow_logo );
             }
-            if( $paynow_align =  Tools::getValue( 'sage_paynow_align' ) )
+            if( $paynow_align =  Tools::getValue( 'netcash_paynow_align' ) )
             {
-                 Configuration::updateValue( 'SAGE_PAYNOW_ALIGN', $paynow_align );
+                 Configuration::updateValue( 'NETCASH_PAYNOW_ALIGN', $paynow_align );
             }
 
 
@@ -117,7 +117,7 @@ class PayNow extends PaymentModule
                     // We can continue, SOAP is installed
 
                     require_once(dirname(__FILE__).'/PayNowValidator.php');
-                    $Validator = new SagePay\PayNowValidator();
+                    $Validator = new Netcash\PayNowValidator();
                     $Validator->setVendorKey('94cdf2e6-f2e7-4c91-ad34-da5684bfbd6f');
 
                     try {
@@ -144,7 +144,7 @@ class PayNow extends PaymentModule
             }
 
             if(!empty($serviceKeyErrors)) {
-                $serviceKeyErrors[] = "Please contact your Sage Pay Account manager on 0861 338 338 for assistance.";
+                $serviceKeyErrors[] = "Please contact your Netcash Account manager on 0861 338 338 for assistance.";
                 foreach ($serviceKeyErrors as $error) {
                     $errors[] = "<div class='warning warn'>{$error}</div>";
                 }
@@ -215,7 +215,7 @@ class PayNow extends PaymentModule
         </head>
         <form action="'.$_SERVER['REQUEST_URI'].'" method="post">
           <div class="paynow__main--section" id="main__section">
-          <span class="main__section--header">Sage Pay Now Settings:</span>
+          <span class="main__section--header">Netcash Pay Now Settings:</span>
 
               <div class="merchant__details merchant__config">
                  <div class="account__details">
@@ -237,8 +237,8 @@ class PayNow extends PaymentModule
                     <input class="merchant__input" type="text" step="0" min="0" name="paynow_service_key" placeholder="" value="'.Tools::getValue('paynow_service_key', Configuration::get('PAYNOW_SERVICE_KEY')).'" />
 
                  </div>
-             <p class="additional__info additional__info--smaller">'.$this->l('You can find your Service Key in your ').'<a id="paynow__link" href="https://sagepay.co.za/">'.
-            $this->l('Sage Pay Now').'</a>'.$this->l(' account.').'</p>
+             <p class="additional__info additional__info--smaller">'.$this->l('You can find your Service Key in your ').'<a id="paynow__link" href="https://netcash.co.za/">'.
+            $this->l('Netcash Pay Now').'</a>'.$this->l(' account.').'</p>
              </div>
 
             <div class="divider"></div>
@@ -273,13 +273,13 @@ class PayNow extends PaymentModule
                     '.$this->l('Payment option text').'
                   </span>
 
-                  <input  class="merchant__input"   type="text" name="sage_paynow_text" value="'. Configuration::get('SAGE_PAYNOW_TEXT').'">
+                  <input  class="merchant__input"   type="text" name="netcash_paynow_text" value="'. Configuration::get('NETCASH_PAYNOW_TEXT').'">
                   ';
 
                 //Pay Now text preview.
                 $html .= '<span class="merchant__headers preview__header">Preview</span>
                   <div>
-                    '.Configuration::get('SAGE_PAYNOW_TEXT') .
+                    '.Configuration::get('NETCASH_PAYNOW_TEXT') .
                     '&nbsp&nbsp<img alt="Pay Now" title="Pay Now" src="'.__PS_BASE_URI__.'modules/paynow/logo.png">
                   </div>
                </div>
@@ -288,7 +288,7 @@ class PayNow extends PaymentModule
             <div class="divider"></div>';
 
         //image position field
-//        $html .= '<div class="merchant__details merchant__config preview__section"><p class="additional__info additional__info--taller">'.$this->l('Select the position where the "Payments by Sage Pay Now" image will appear on your website. This will be dependant on your theme.').'</p>
+//        $html .= '<div class="merchant__details merchant__config preview__section"><p class="additional__info additional__info--taller">'.$this->l('Select the position where the "Payments by Netcash Pay Now" image will appear on your website. This will be dependant on your theme.').'</p>
 //
 //            <div class="account__details">
 //            <span>
@@ -319,7 +319,7 @@ class PayNow extends PaymentModule
       <div class="paynow__form--footer">
       <span class="footer__header">'.$this->l('Additional Information:').'</span>
       <div class="footer__info">
-      <span class="footer__info--para">- '.$this->l('Any orders in currencies other than ZAR will be converted by PrestaShop prior to be sent to the Sage Pay Now gateway.').'</span>
+      <span class="footer__info--para">- '.$this->l('Any orders in currencies other than ZAR will be converted by PrestaShop prior to be sent to the Netcash Pay Now gateway.').'</span>
         </div>
     </div-->
 
@@ -334,7 +334,7 @@ class PayNow extends PaymentModule
     {
         $html = '
             <div style="text-align:center;">
-                <a href="https://sagepay.co.za/" target="_blank" title="Payments via Sage Pay Now">
+                <a href="https://netcash.co.za/" target="_blank" title="Payments via Netcash Pay Now">
                     <img src="'.__PS_BASE_URI__.'modules/paynow/secure_logo.png" width="150" />
                 </a>
             </div>';
@@ -357,7 +357,7 @@ class PayNow extends PaymentModule
         $html = '
         <section id="paynow_footer_link" class="footer-block col-xs-12 col-sm-2">
             <div style="text-align:center;">
-                <a href="https://sagepay.co.za/" rel="nofollow" title="Secure Payments With Sage Pay Now">
+                <a href="https://netcash.co.za/" rel="nofollow" title="Secure Payments With Netcash Pay Now">
                     <img src="'.__PS_BASE_URI__.'modules/paynow/secure_logo.png"  />
                 </a>
             </div>
@@ -414,11 +414,11 @@ class PayNow extends PaymentModule
         $data['info']['m1'] = $service_key;
         $data['info']['m2'] = $software_vendor_key;
 
-        $data['paynow_url'] = 'https://paynow.sagepay.co.za/site/paynow.aspx';
+        $data['paynow_url'] = 'https://paynow.netcash.co.za/site/paynow.aspx';
 
-        $data['sage_paynow_text'] = Configuration::get('SAGE_PAYNOW_TEXT');
-        $data['sage_paynow_logo'] = Configuration::get('SAGE_PAYNOW_LOGO');
-        $data['sage_paynow_align'] = Configuration::get('SAGE_PAYNOW_ALIGN');
+        $data['netcash_paynow_text'] = Configuration::get('NETCASH_PAYNOW_TEXT');
+        $data['netcash_paynow_logo'] = Configuration::get('NETCASH_PAYNOW_LOGO');
+        $data['netcash_paynow_align'] = Configuration::get('NETCASH_PAYNOW_ALIGN');
         // Create URLs
         $data['info']['return_url'] = $this->context->link->getPageLink( 'order-confirmation', null, null, 'key='.$cart->secure_key.'&id_cart='.(int)($cart->id).'&id_module='.(int)($this->id));
         $data['info']['cancel_url'] = Tools::getHttpHost( true ).__PS_BASE_URI__;
@@ -443,6 +443,7 @@ class PayNow extends PaymentModule
 	    // Custom data
 	    $return_vars = 'key='.$cart->secure_key.'&id_cart='.(int)($cart->id).'&id_module='.(int)($this->id);
 	    $data['info']['m10'] = $return_vars;
+	    $data['info']['m14'] = 1;
 
         $outputHtml = '';
 
@@ -459,7 +460,7 @@ class PayNow extends PaymentModule
 
         //create the payment option object
         $externalOption = new PaymentOption();
-        $externalOption->setCallToActionText($this->l(Configuration::get('SAGE_PAYNOW_TEXT')))
+        $externalOption->setCallToActionText($this->l(Configuration::get('NETCASH_PAYNOW_TEXT')))
                        ->setAction($data['paynow_url']) //
                        ->setInputs($pnValues)
                        ->setAdditionalInformation($this->context->smarty->fetch('module:paynow/payment_info.tpl'))

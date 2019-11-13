@@ -1,5 +1,5 @@
 {*
-* Copyright 2019 Sage Pay (Pty) Ltd
+* Copyright 2019 Netcash (Pty) Ltd
 *}
 
 {if $status == 'ok'}

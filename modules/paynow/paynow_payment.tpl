@@ -1,4 +1,4 @@
-{*Copyright 2019 Sage Pay (Pty) Ltd*}
+{*Copyright 2019 Netcash (Pty) Ltd*}
 <p class="payment_module">
 	<a href="{$base_dir_ssl}modules/paynow/payment.php" title="{$buttonText}">
 		<img src="modules/paynow/paynow.png" alt="{$buttonText}" />

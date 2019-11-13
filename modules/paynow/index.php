@@ -1,6 +1,6 @@
 <?php
 /*
-* Copyright 2019 Sage Pay (Pty) Ltd
+* Copyright 2019 Netcash (Pty) Ltd
 */
 
 header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!--Copyright 2019 Sage Pay (Pty) Ltd -->
+<!--Copyright 2019 Netcash (Pty) Ltd -->
 <module>
     <name>paynow</name>
-    <displayName><![CDATA[Sage Pay Pay Now]]></displayName>
+    <displayName><![CDATA[Netcash Pay Now]]></displayName>
     <version><![CDATA[1.0.0]]></version>
-    <description><![CDATA[Accept payments by credit card, EFT, securely and quickly with Sage Pay Now.]]></description>
-    <author><![CDATA[Sage Pay]]></author>
+    <description><![CDATA[Accept payments by credit card, EFT, securely and quickly with Netcash Pay Now.]]></description>
+    <author><![CDATA[Netcash]]></author>
     <tab><![CDATA[payments_gateways]]></tab>
 	<confirmUninstall><![CDATA[Are you sure you want to remove your data?]]></confirmUninstall>
     <is_configurable>1</is_configurable>
