@@ -19,16 +19,16 @@ Prerequisites:
 
 You will need:
 
-* Netcash Pay Now login credentials
+* Netcash login credentials
 * Netcash Pay Now Service key
 * PrestaShop admin login credentials
 
 Netcash Pay Now Gateway Server Configuration Steps:
 
-1. Log into your Netcash Pay Now Gateway Server configuration page:
+1. Log into your Netcash account:
 	https://merchant.netchash.co.za/SiteLogin.aspx
 2. Go to Account / Profile
-3. Click Netcash Connect
+3. Click netConnector
 4. Click Pay Now
 5. Make a note of your Service key
 
