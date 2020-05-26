@@ -112,6 +112,13 @@ function pn_do_transaction() {
 			$order_exists = $cart->OrderExists();
 			pnlog( '- Order Exists? ' . ($order_exists ? 'TRUE' : 'FALSE') );
 
+			global $kernel;
+			if(!$kernel){
+			require_once _PS_ROOT_DIR_.'/app/AppKernel.php';
+			$kernel = new \AppKernel('prod', false);
+			$kernel->boot();
+			}
+
 			if(!$order_exists) {
 				// Update the purchase status
 				$paynow->validateOrder( $cartId, _PS_OS_PAYMENT_, (float) $total,
