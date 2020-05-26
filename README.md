@@ -1,6 +1,3 @@
-THIS PLUGIN IS NO LONGER SUPPORTED BY NETCASH
-======
-
 Netcash Pay Now PrestaShop Credit Card Payment Module
 =========================================================
 
